@@ -1,0 +1,13 @@
+# Dependencias mínimas
+fastapi
+uvicorn
+numpy
+scipy
+pydantic
+sounddevice
+matplotlib
+
+# Dependencias de desarrollo
+pytest
+httpx
+ruff
