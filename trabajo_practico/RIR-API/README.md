@@ -77,7 +77,35 @@ rir-api/
 ├── pyproject.toml                 # Configuración del proyecto
 └── README.md
 ```
+## Diagrama de arquitectura
+```mermaid
+graph LR
+    Client --> R[Routers]
 
+    R --> PN[/pink-noise/]
+    R --> SS[/sine-sweep/]
+    R --> AN[/analyze/]
+
+    R --> Sch[Schemas]
+
+    Sch --> Req[Request]
+    Sch --> Res[Response]
+
+    R --> S[Services]
+
+    S --> Gen[Generación]
+    Gen --> PN2[Ruido rosa]
+    Gen --> SS2[Sine sweep]
+
+    S --> Proc[Procesamiento]
+    Proc --> Filtros[Filtros]
+    Proc --> Deconv[Deconvolución]
+
+    S --> Analisis[Análisis]
+    Analisis --> Params[Parámetros acústicos]
+
+
+```
 ## Estrategia de ramas
 
 - main:  
