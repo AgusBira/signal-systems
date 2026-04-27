@@ -13,7 +13,7 @@ RIR-API es un proyecto educativo que implementa una API REST (FastAPI) con una c
     - Responsable de generación de señales
 
 - Ivo Manoli
-    - Legajo
+    - Legajo 64189
     - Responsable de procesamiento
 
 - Gaspar Dallinge
