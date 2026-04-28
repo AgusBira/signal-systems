@@ -1,240 +1,220 @@
-# Trabajo práctico - Desarrollo de software para el cálculo de parámetros acústicos ISO 3382
+# Trabajo Practico - RIR-API: Room Impulse Response API
 
 ## Objetivo general
-El siguiente trabajo propone realizar un software modular que permita el cálculo de parámetros acústicos propuestos en la normativa ISO 3382 (UNE-EN ISO 3382, 2010). Un sistema íntegro que contemple todos los elementos necesarios para una medición in-situ.
 
-## Objetivos particulares
-Los alumnos adquirirán las siguientes habilidades:
+Desarrollar **RIR-API**, una API REST en Python (FastAPI) para el calculo de parametros acusticos segun la norma ISO 3382 (UNE-EN ISO 3382, 2010). El sistema debe contemplar todos los elementos necesarios para el procesamiento de respuestas al impulso: generacion de senales de excitacion, procesamiento de la RI y calculo de parametros acusticos, expuestos como endpoints de una API consumible por cualquier cliente (frontend web, script, otra aplicacion).
 
-* Desarrollo de funciones para:
-    * Generación y reproducción de ruido rosa.
-    * Generación y reproducción de sine sweep.
-    * Adquisición de la RI.
-    * Procesamiento de las RI.
-* Adquirir las capacidades de interpretar los lineamientos de una normativa.
-* Autonomía en la lectura del material dispuesto por los docentes.
-* Autoevaluación de todo el material desarrollado.
-* Presentación de avances.
-* **Los resultados obtenidos no deben diferir en más de ±0.5 s de los arrojados por algún software comercial (y/o de los establecidos en la RI sintetizada).**
-* Documentar (en [LaTeX](https://www.latex-project.org/)) el procedimiento de medición y diseño de scripts.
+El proyecto se desarrolla de forma incremental en **4 milestones** (M0-M3), utilizando herramientas profesionales de desarrollo de software.
 
-## Consigna
-La siguiente [presentación](https://docs.google.com/presentation/d/1XJAI0wFRRS6IaVops3jCAcfdRxvMJyQs_mIetzehh1c/edit?usp=sharing) tiene el detalle de la consigna del TP.
+> **API de referencia**: La catedra desarrolló una implementacion de referencia desplegada en produccion. Pueden explorar la documentacion interactiva (Swagger UI) en [https://rir-api.onrender.com/docs](https://rir-api.onrender.com/docs) para entender la estructura de endpoints, schemas y respuestas esperadas. Esta API sirve como guia, no como solucion — cada grupo debe desarrollar su propia implementacion.
 
-## Material
-Todo el material necesario para elaborar el TP se encuentra en la siguiente [carpeta](https://drive.google.com/drive/folders/1unNETr7js3hWZtuxa7-5uV9wns9KdTdT?usp=share_link).
+## Objetivos de aprendizaje
 
-## Entregas
-Realizar un trabajo práctico que cumpla con las tres etapas de entrega resumidas en la siguiente tabla, en **grupos reducidos de 3 a 4 integrantes (excluyente). Los envios se realizan por mail/slack y se deben presentar antes del dia definido para las entregas (como figura en el calendario)**.
+Al completar este trabajo practico, los alumnos habran adquirido las siguientes habilidades:
 
-<table>
-	<tr>
-		<th>N° de entrega</th>
-		<th>Función</th>
-		<th>Uso</th>
-        <th>Test</th>
- 	</tr>
- 	<tr>
-  		<td rowspan="3"><a href="noteboks/primer_entrega.ipynb">1° entrega</a></td>
-   		<td>Función de sintetización de ruido rosa</td>
-		<td>Se utiliza para ajustar el nivel de la fuente al menos a 45 dB por encima del nivel de ruido de fondo en la banda de frecuencia correspondiente</td>
-   		<td rowspan="3" style="text-align:left"><ul><li>Corroborar que ambas funciones (Ruido rosa - Sine sweep logarítmico + Filtro
-            inverso) se comportan adecuadamente utilizando, por ejemplo el software Audacity, para ver sus respectivos espectros.
-        </li><li>Convolucionar un sine sweep logarítmico generado y su respectivo filtro inverso y estudiar resultados.</li><li>Reproducir y grabar de manera simultánea.</li></ul>
-        </td>
- 	</tr>
-	<tr>
-  		<td>Función de generación de sine sweep logarítmico + filtro inverso</td>
-   		<td>Se utiliza para obtener la respuesta al impulso a partir del sine sweep logarítmico</td>
- 	</tr>
-	<tr>
-  		<td>Adquisición y reproducción</td>
-   		<td>Se utiliza para adquirir y reproducir las señales durante una medición in-situ.</td>
- 	</tr>
-    <tr>
-  		<td rowspan="5"><a href="noteboks/segunda_entrega.ipynb">2° entrega</a></td>
-   		<td>Función de carga de archivos de audio (dataset)</td>
-		<td>Se utiliza para administrar información al software y evaluar los parámetros acústicos ISO 3382 de dichos audios</td>
-   		<td rowspan="5" style="text-align:left"><ul><li>Verificar el espectro de los filtros generados, utilizando scipy.</li><li>Obtener respuesta al impulso a partir de los 
-            sine sweep y el filtro inverso descargados (dataset).</li>
-            <li>Evaluar las respuestas al impulso sintetizadas, las respuesta al impulso generadas y sine sweep, con algún programa comercial</li></ul>
-        </td>	
- 	</tr>
-	<tr>
-  		<td>Función de sintetización de respuesta al impulso</td>
-   		<td>Se utiliza evaluar el algoritmo con una señal conocida</td>
- 	</tr>
-    <tr>
-  		<td>Función obtener respuesta al impulso</td>
-   		<td>Se utiliza para obtener la respuesta al impulso a partir del sine sweep logarítmico</td>
- 	</tr>
-	<tr>
-  		<td>Función filtros norma IEC 61260</td>
-   		<td>La función filtros norma IEC 61260 es útil para filtrar la respuesta al impulso y calcular los parámetros acústicos por frecuencia</td>
- 	</tr>
-    <tr>
-        <td>Función conversión a escala logarítmica normalizada</td>
-		<td>Se utiliza para visualizar la señal en una escala más acorde al fenómeno que se estudia</td>
-    </tr>
-    <tr>
-  		<td rowspan="5"><a href="noteboks/tercer_entrega.ipynb">3° entrega</a></td>
-   		<td>Función suavizado de señal</td>
-   		<td>Se utiliza para las fluctuaciones producto del ruido intrínseco en la respuesta al impulso.</td>
-   		<td rowspan="5" style="text-align:left">
-            <ul>
-                <li>Graficar en escala logarítmica la señales de interés.</li>
-                <li>Probar con las respuestas al impulso sintetizadas y las muestras descargadas. En caso de utilizar más de una toma por recinto, calcular el valor medio y la desviación estándar.</li>
-                <li>Graficar los resultados.</li>
-                <li>Establecer la integración de todas las funciones usando un archivo de programa "main".</li>
-                <li>Compara los resultados con software específico para el análisis de señales o plugins del mercado.</li>
-            </ul>
-        </td>	
- 	</tr>	
-	<tr>
-  		<td>Función integral de Schroeder</td>
-   		<td>La función integral de Schroeder representa la curva de decaimiento de la energía acústica.</td>
- 	</tr>
-    <tr>
-  		<td>Función regresión lineal por mínimos cuadrados </td>
-   		<td>La función regresión lineal por mínimos cuadrados permite evaluar el tiempo de reverberación.</td>
- 	</tr>
-    <tr>
-  		<td>Función cálculo de parámetros acústicos </td>
-   		<td>Se utiliza para determinar las características acústicas de recintos cerrados</td>
- 	</tr>
-    <tr>
-  		<td>Informe final</td>
-   		<td>Realizar informe final usando LaTex y respetando el formato dado</td>
- 	</tr>
-    <tr>
-  		<td rowspan="1">Extra</td>
-   		<td>Función Lundeby</td>
-		<td>Se utiliza para encontrar los extremos de integración más precisos.</td>
-   		<td rowspan="1" style="text-align:left"><ul><li>Probar con las respuestas muestras descargadas nuevamente y cuantificar la diferencia respecto a no utilizar 
-            Lundeby.</li></ul>
-        </td>	
- 	</tr>
-</table>
+- **Desarrollo de software**: disenar e implementar una API REST modular en Python con FastAPI, con buenas practicas de codigo, testing y documentacion.
+- **Arquitectura de APIs**: disenar endpoints, schemas de validacion (Pydantic), manejo de errores HTTP y documentacion OpenAPI.
+- **Procesamiento de senales**: implementar algoritmos de generacion, filtrado, deconvolucion y analisis de senales de audio.
+- **Normativa tecnica**: interpretar y aplicar los lineamientos de la ISO 3382 y la IEC 61260.
+- **Validacion**: autoevaluar el software comparando resultados con herramientas comerciales.
+- **Trabajo colaborativo**: usar Git, GitHub, issues, pull requests y revisiones de codigo.
+- **Comunicacion tecnica**: documentar el proceso y presentar resultados de forma profesional.
+- **Despliegue**: llevar el producto a un entorno accesible (deploy), acercandose a un MVP real.
 
-> 👮 La columna *test* indica las pruebas que tienen que superar las funciones para considerarse aprobadas. Recomendamos atenderlas para probar el código presentado.
+> **Los resultados obtenidos no deben diferir en mas de +-0.5 s de los arrojados por algun software comercial (y/o de los establecidos en la RI sintetizada).**
 
-## Informe técnico
-El trabajo práctico consta de un informe técnico que refleja los resultados y el código desarrollado, el mismo se realiza íntegramente en [Latex](https://www.latex-project.org/).
+---
 
-> **LaTeX** es un sistema de composición de texto, donde prevalece el contenido sobre el formato y esto es gracias a que la escritura es en texto plano (sin formato). El formato es ingresado con una serie de comandos propios del sistema. Incluye características diseñadas para la producción de documentación técnica y científica, que hacen fácil la producción de documentación estructurada. Ademas y no menos importante, es libre y gratuito.
+## Estructura del TP: Milestones
 
-* Editor online de LaTeX - [Overleaf](https://www.overleaf.com/)
-* Editor offline de LaTeX - [Texmaker](https://www.xm1math.net/texmaker/) + [MiKTeX](https://miktex.org/)
+| Milestone | Titulo | Fecha de entrega | Tag | Peso |
+|-----------|--------|-----------------|-----|------|
+| [M0](especificacion/m0_arquitectura.md) | El Plano (arquitectura) | Semana 5 - 28/04/2026 | - | 5% |
+| [M1](especificacion/m1_generacion.md) | Generacion de senales | Semana 8 - 19/05/2026 | `v0.1.0` | 15% |
+| [M2](especificacion/m2_procesamiento.md) | Procesamiento de la RI | Semana 12 - 16/06/2026 | `v0.2.0` | 20% |
+| [M3](especificacion/m3_producto_final.md) | Producto final | Semana 15 - 07/07/2026 | `v1.0.0` | 30% |
 
-En cualquiera de los casos el template para confeccionar el informe se utiliza el formato de la UNTREF para [memorias cuatrimestrales](https://drive.google.com/file/d/1YwtmfM1YYl1k_J5mDwJ6zEJEetitKask/view?usp=share_link). Los archivos .tex, se encuentran en la siguiente [carpeta](https://drive.google.com/drive/folders/1giSkdwsGBNFW-aSAB3JxaDxZ5dRmKU3x?usp=share_link). El mismo consta de un [main.tex](https://drive.google.com/file/d/1aGV3BoehQocyW0AbcdslqzODplwIqpKT/view?usp=share_link) con la estructura base del template y en la carpeta secciones las distintas partes del documento.
+Completar la [rubrica de evaluacion](rubrica.md) para conocer los criterios detallados de calificacion.
 
-> 🌈 Para la elaboración del informe recomendamos la lectura del documento [Curso introductorio a escritura en LaTeX](https://drive.google.com/file/d/1yaJD1QCCDyI8oMFzS0ZVzFg-8cyGPZCA/view?usp=share_link). Desarrollado por [Nahuel Passano](https://www.linkedin.com/in/nahuelpassano) - [Paula Ortega Riera](https://www.linkedin.com/in/paulaortegariera) de [Infiniem Labs](https://www.infiniemlabs.com.ar/).
+---
 
-## Informe preliminar (opcional)
-Respetar las siguientes pautas:
+## Resumen de entregas por milestone
 
-* Mencionar los detalles en el diseño de los scripts (con ayuda de diagramas de flujo o pseudocódigo), sin agregar código propiamente dicho.
-* Describir el dataset seleccionado para probar el software.
-* El informe debe reflejar la arquitectura del software desarrollado y los avances en la producción del mismo. Los datos que se informan tiene que ser relevantes y garantizar la reproducibilidad de los mismos. No ahondar en muchos detalles teóricos y definiciones (hacer uso de referencias), hacer más bien foco en la producción del software, su evaluación y su validación.
-* El informe preliminar no debe exceder las 3 páginas. 
-* Respetar fecha de entrega.
+### M0 - El Plano (Semana 5)
+- README del repositorio con integrantes, instrucciones y estructura.
+- Diagrama de arquitectura (Mermaid o draw.io).
+- Al menos 10 GitHub Issues con labels y asignaciones.
+- Proyecto instalable con `pip` o `uv`.
 
-## Informe final (obligatorio)
-Respetar las siguientes pautas:
+### M1 - Generacion de senales (Semana 8)
+| Funcion | Descripcion |
+|---------|-------------|
+| `generar_ruido_rosa(duracion, fs)` | Ruido rosa via algoritmo Voss-McCartney. Espectro -3 dB/octava. |
+| `generar_sine_sweep(f1, f2, duracion, fs)` | Sine sweep logaritmico + filtro inverso. |
+| `reproducir_y_grabar(signal, fs, duracion_grabacion)` | Reproduccion y grabacion simultanea con `sounddevice`. |
 
-* Realizar un informe final, con el mismo formato establecido en el informe preliminar (atendiendo a las observaciones marcadas en la entrega del informe preliminar), pero en este caso no debe exceder las 5 páginas. 
-* Remitir solamente a detalles relevantes.
-* En el informe debe figurar claramente cómo se unen todas las funciones definidas y la interacción entre ellas. Utilizar algún diagrama para visualizar dicha relación.
-* Mencionar detalladamente el procedimiento.
-* Mostrar curvas de filtros, plot del procesamiento de la señal.
-* Validación del algoritmo con software comercial.
-* Los informes finales entregados fuera de fecha no serán evaluados (pasan directamente a recuperatorio).
+### M2 - Procesamiento de la RI (Semana 12)
+| Funcion | Descripcion |
+|---------|-------------|
+| `cargar_audio(ruta)` | Carga archivos WAV/FLAC, devuelve array + sr. |
+| `sintetizar_ri(t60_por_banda, fs, duracion)` | Sintetiza RI con T60 conocidos para validacion. |
+| `obtener_ri_desde_sweep(grabacion, filtro_inverso)` | Deconvolucion via FFT para obtener la RI. |
+| `filtro_octava(signal, fc, fs, orden)` | Filtro de banda de octava segun IEC 61260 (Butterworth). |
+| `a_escala_log(signal)` | Conversion a escala logaritmica normalizada (dB). |
 
-> A modo de ejemplo dejamos dos informes modelos: [Dylan Kaplan - Franco Rebora - Santiago Salinas](https://drive.google.com/file/d/1Xum3AZLTr6sm2q462rsJaoRpM00sgSNk/view?usp=share_link) y [Castelli Corina - Espindola Agustin - Lareo Matıas Federico - Passano Nahuel](https://drive.google.com/file/d/1HSazrH4OWhI8_3VEaoks2ZMtf0E63aEA/view?usp=share_link)
+### M3 - Producto final: API REST (Semana 15)
+| Componente | Descripcion |
+|------------|-------------|
+| `suavizar_signal(signal, ventana)` | Media movil o envolvente de Hilbert. |
+| `integral_schroeder(ri)` | Integracion inversa de Schroeder. |
+| `regresion_lineal(x, y)` | Minimos cuadrados para calcular tiempos de reverberacion. |
+| `calcular_parametros_acusticos(ri, fs)` | EDT, T10, T20, T30, T60, D50, C80 por banda de octava. |
+| **API REST (FastAPI)** | Endpoints que exponen toda la funcionalidad de M1, M2 y M3. |
+| `metodo_lundeby(ri, fs)` *(extra)* | Limites de integracion mas precisos. |
 
-## Distribución de contenidos del informe 
-A modo ilustrativo se muestra los porcentajes del contenido en los informes:
+---
 
-| Resumen | Introducción | Marco teórico | Desarrollo experimental | Resultados | Conclusiones |
-| -- | -- | -- | -- | -- | --  |
+## Herramientas y tecnologias
+
+| Herramienta | Uso |
+|-------------|-----|
+| **Python 3.10+** | Lenguaje de desarrollo |
+| **FastAPI** | Framework para la API REST |
+| **Pydantic** | Validacion de datos y schemas |
+| **Uvicorn** | Servidor ASGI para correr la API |
+| **NumPy / SciPy** | Procesamiento de senales y calculos numericos |
+| **sounddevice** | Reproduccion y grabacion de audio |
+| **matplotlib** | Visualizacion de resultados |
+| **pytest** | Framework de testing |
+| **ruff** | Linting y formateo de codigo |
+| **Git / GitHub** | Control de versiones y colaboracion |
+| **GitHub Actions** | Integracion continua (CI) |
+| **uv** | Gestion de entornos y dependencias (recomendado) |
+| **Quarto / LaTeX** | Informe final |
+
+---
+
+## De idea a MVP: el ejemplo de la catedra
+
+La catedra desarrolló una implementacion completa de RIR-API como ejemplo de como llevar una idea tecnica a un producto funcional:
+
+- **Backend (API)**: API REST desplegada en [https://rir-api.onrender.com](https://rir-api.onrender.com) — los alumnos pueden explorar la [documentacion interactiva (Swagger UI)](https://rir-api.onrender.com/docs) para entender la estructura, los endpoints y los schemas de respuesta.
+- **Frontend**: Aplicacion web que consume la API (se mostrara en clase como demo).
+- **Deploy**: La API corre en produccion en Render, accesible desde cualquier lugar.
+
+Este flujo (modulos de procesamiento → API → frontend → deploy) es un ejemplo concreto de como transformar conocimiento tecnico en un MVP presentable. **El objetivo del TP es que cada grupo recorra este mismo camino con su propia implementacion.**
+
+---
+
+## Grupos de trabajo
+
+- Grupos de **3 a 4 integrantes** (excluyente).
+- Cada integrante debe tener un **rol definido** y contribuciones verificables en el historial de Git.
+- Las entregas se realizan via **tag de GitHub** en la fecha indicada.
+- Los docentes deben tener acceso al repositorio como colaboradores.
+
+---
+
+## Informe final
+
+El informe final es **obligatorio** y se realiza en **Quarto** o **LaTeX** (formato UNTREF para memorias cuatrimestrales).
+
+### Distribucion de contenido
+
+| Resumen | Introduccion | Marco teorico | Desarrollo experimental | Resultados | Conclusiones |
+|---------|-------------|---------------|------------------------|------------|-------------|
 | 5% | 10% | 10% | 25% | 30% | 20% |
 
-## Presentación oral final
-Los resultados alcanzados deben ser presentados de manera oral al finalizar el proyecto. Esta presentación constituye una instancia fundamental de evaluación que permite demostrar tanto las competencias técnicas desarrolladas como la capacidad de comunicación profesional.
+### Pautas del informe
 
-### **Modalidad y duración**
-- **Duración:** 20 minutos de presentación + 5 minutos de preguntas.
-- **Audiencia:** Toda la clase (estudiantes y docentes).
-- **Formato:** Presencial con apoyo de material visual (.ppt/.pdf).
+- Extension maxima: **5 paginas** (sin apendices).
+- Debe incluir diagrama de arquitectura, graficas de resultados y tabla de validacion con software comercial.
+- Remitir a detalles relevantes, no ahondar en teoria (usar referencias).
+- Documentar como se conectan todos los modulos.
+- Validacion del algoritmo con software comercial.
+- Los informes entregados fuera de fecha no se evaluan (pasan a recuperatorio).
 
-### **Estructura recomendada**
+### Herramientas de escritura
 
-#### **1. Introducción (3 minutos)**
-- Contexto del proyecto y objetivos alcanzados.
-- Presentación del equipo y distribución de responsabilidades.
-- Overview de la arquitectura del software desarrollado.
+- **LaTeX online**: [Overleaf](https://www.overleaf.com/)
+- **LaTeX offline**: [Texmaker](https://www.xm1math.net/texmaker/) + [MiKTeX](https://miktex.org/)
+- **Alternativa moderna**: [Quarto](https://quarto.org/) (soporta Jupyter notebooks, Markdown y LaTeX)
 
-#### **2. Desarrollo técnico (8 minutos)**
-- **Demostración práctica:** Mostrar 2-3 funciones clave funcionando en vivo.
-- **Decisiones de diseño:** Justificar enfoques técnicos adoptados.
-- **Integración del sistema:** Explicar cómo se conectan los módulos desarrollados.
+> Para la elaboracion del informe en LaTeX recomendamos la lectura del documento [Curso introductorio a escritura en LaTeX](https://drive.google.com/file/d/1yaJD1QCCDyI8oMFzS0ZVzFg-8cyGPZCA/view?usp=share_link), desarrollado por [Nahuel Passano](https://www.linkedin.com/in/nahuelpassano) y [Paula Ortega Riera](https://www.linkedin.com/in/paulaortegariera) de [Infiniem Labs](https://www.infiniemlabs.com.ar/).
 
-#### **3. Resultados y validación (6 minutos)**
-- **Comparación con software comercial:** Mostrar diferencias, similitudes y precisión.
-- **Análisis de rendimiento:** Discutir rangos de error y confiabilidad.
-- **Casos de prueba:** Presentar resultados con datasets reales.
+---
 
-#### **4. Reflexiones y aprendizajes (3 minutos)**
-- **Principales dificultades** encontradas y cómo se resolvieron.
-- **Aspectos más desafiantes** del proyecto.
-- **Aprendizajes técnicos y metodológicos** más significativos.
+## Presentacion oral
 
-### **Requisitos obligatorios de contenido**
+- **Duracion**: 20 minutos de presentacion + 5 minutos de preguntas.
+- **Audiencia**: toda la clase (estudiantes y docentes).
+- **Formato**: presencial con apoyo visual y **demostracion en vivo de la API**.
 
-#### **Material visual requerido**
-✅ **Gráficos de resultados (por ejemplo):**
-- Respuesta al impulso sintetizada vs. real.
-- Curvas de decaimiento en escala logarítmica.
-- Comparación espectral (antes/después del filtrado).
-- Validación con software de referencia.
+### Estructura recomendada
 
-✅ **Demostración en vivo del software:**
-- Carga de archivos de audio.
-- Procesamiento completo de una señal.
-- Generación de resultados finales.
+1. **Introduccion** (3 min): contexto, equipo, arquitectura de la API.
+2. **Desarrollo tecnico** (8 min): demo en vivo (Swagger UI, requests), decisiones de diseno, integracion de capas.
+3. **Resultados y validacion** (6 min): comparacion con software comercial, precision.
+4. **Reflexiones** (3 min): dificultades, aprendizajes, mejoras posibles.
 
-✅ **Tabla comparativa:** Resultados propios vs. valores de referencia (mínimo RTtotal / RToctava).
+### Evaluacion de la presentacion
 
-### **Criterios de evaluación**
-
-| Aspecto | Peso | Descripción |
+| Aspecto | Peso | Descripcion |
 |---------|------|-------------|
-| **Aspectos técnicos** | 40% | Profundidad de comprensión, calidad de implementación, validez de resultados, capacidad de demostración |
-| **Comunicación** | 35% | Claridad explicativa, uso efectivo del material visual, gestión del tiempo, respuesta a preguntas |
-| **Análisis crítico** | 25% | Reflexión sobre limitaciones, comparación objetiva, identificación de mejoras, aprendizajes |
+| Aspectos tecnicos | 40% | Profundidad, calidad de implementacion, validacion, demo |
+| Comunicacion | 35% | Claridad, material visual, gestion del tiempo, respuestas |
+| Analisis critico | 25% | Reflexion sobre limitaciones, comparacion objetiva, aprendizajes |
 
-### **Recomendaciones específicas**
+---
 
-#### **Para el éxito de la demostración:**
-1. **Ensayar múltiples veces** la demo técnica para evitar errores en vivo.
-2. **Preparar archivos de respaldo** en caso de problemas técnicos.
-3. **Tener resultados pre-calculados** como backup si el software falla.
-4. **Designar roles claros** entre integrantes durante la presentación.
+## Log de desarrollo con IA
 
-#### **Para una comunicación efectiva:**
-1. **Usar terminología técnica precisa** pero explicar conceptos complejos.
-2. **Conectar resultados con teoría** vista en clase.
-3. **Ser honestos sobre limitaciones** - es parte del aprendizaje profesional.
-4. **Mostrar entusiasmo** por el trabajo realizado y los aprendizajes obtenidos.
+Cada grupo debe mantener un archivo **`AI_LOG.md`** en la raiz del repositorio que documente el uso de herramientas de IA (ChatGPT, Claude, Copilot, etc.) durante el proyecto.
 
-### **Pregunta de reflexión obligatoria**
-Cada grupo debe prepararse para responder: *"¿Qué fue lo más valioso que aprendieron desarrollando este proyecto y cómo lo aplicarían en su carrera profesional?"*
+### Que documentar en cada entrada
 
-> **Esta presentación representa la culminación del trabajo más importante de la asignatura. Es una oportunidad para demostrar no solo las habilidades técnicas desarrolladas, sino también la capacidad de comunicar conocimiento especializado y reflexionar críticamente sobre el propio proceso de aprendizaje.**
+1. Fecha y milestone.
+2. Herramienta utilizada.
+3. Consulta realizada (resumida).
+4. Resultado obtenido (resumido).
+5. Evaluacion: fue util? que se modifico? que se aprendio?
 
-## + Info
-* [Documentación oficial de overleaf](https://www.overleaf.com/learn)
-* [Generador de tablas en LaTeX](https://www.tablesgenerator.com/)
-* [Base de datos de RI](https://www.openairlib.net/)
-* [How to read a paper](https://web.stanford.edu/class/ee384m/Handouts/HowtoReadPaper.pdf)
-* [Consigna de TP versión Matlab](consigna_TP_matlab.pdf)
+> El uso de IA esta **permitido y fomentado** como herramienta de aprendizaje. Lo que se evalua es la **honestidad**, la **reflexion critica** sobre las respuestas obtenidas y la capacidad de **adaptar** las sugerencias al contexto del proyecto. Ver la [rubrica](rubrica.md) para los criterios detallados.
+
+---
+
+## Recursos
+
+### API de referencia
+- [Documentacion interactiva (Swagger UI)](https://rir-api.onrender.com/docs)
+- [Documentacion alternativa (ReDoc)](https://rir-api.onrender.com/redoc)
+
+### Normativas y referencias tecnicas
+- [ISO 3382-1:2009 - Measurement of room acoustic parameters](https://www.iso.org/standard/40979.html)
+- [IEC 61260-1:2014 - Octave-band and fractional-octave-band filters](https://www.iso.org/standard/69056.html)
+- [Consigna de TP version Matlab (referencia historica)](consigna_TP_matlab%20(desactualizado).pdf)
+
+### Herramientas de desarrollo
+- [FastAPI: documentacion oficial](https://fastapi.tiangolo.com/)
+- [Pydantic: validacion de datos](https://docs.pydantic.dev/)
+- [uv: gestor de paquetes para Python](https://docs.astral.sh/uv/)
+- [pytest: framework de testing](https://docs.pytest.org/)
+- [ruff: linting rapido](https://docs.astral.sh/ruff/)
+- [GitHub Actions: CI/CD](https://docs.github.com/en/actions)
+
+### Datasets
+- [OpenAIR Library - Respuestas al impulso](https://www.openairlib.net/)
+
+### Documentacion y escritura
+- [Overleaf - Editor LaTeX online](https://www.overleaf.com/)
+- [Quarto - Publicacion tecnica](https://quarto.org/)
+- [Generador de tablas en LaTeX](https://www.tablesgenerator.com/)
+
+### Lectura recomendada
+- [How to read a paper (Stanford)](https://web.stanford.edu/class/ee384m/Handouts/HowtoReadPaper.pdf)
+- Farina, A. (2000). "Simultaneous measurement of impulse response and distortion with a swept-sine technique." 108th AES Convention.
+- Schroeder, M. R. (1965). "New method of measuring reverberation time." JASA, 37(3), 409-412.
+
+### Material de la catedra
+- [Presentacion con detalle de la consigna](https://docs.google.com/presentation/d/1XJAI0wFRRS6IaVops3jCAcfdRxvMJyQs_mIetzehh1c/edit?usp=sharing)
+- [Carpeta con material de apoyo](https://drive.google.com/drive/folders/1unNETr7js3hWZtuxa7-5uV9wns9KdTdT?usp=share_link)
