@@ -93,17 +93,26 @@ graph LR
 
     R --> S[Services]
 
-    S --> Gen[Generación]
+    S --> Gen[Generación]           # M1
     Gen --> PN2[Ruido rosa]
     Gen --> SS2[Sine sweep]
 
-    S --> Proc[Procesamiento]
+    S --> Proc[Procesamiento]       # M2
     Proc --> Filtros[Filtros]
     Proc --> Deconv[Deconvolución]
 
-    S --> Analisis[Análisis]
+    S --> Analisis[Análisis]        # M3
     Analisis --> Params[Parámetros acústicos]
 
+# Dependencias Externas
+
+R --> FastAPI[FastAPI]              # entrada del sistema
+R --> Uvicorn[Uvicorn]              # ejecuta la app FastAPI
+Sch --> Pydantic[Pydantic]          # validación de datos
+S --> NumPy[NumPy]                  # arrays, operaciones matemáticas
+S --> SciPy[SciPy]                  # filtros, deconvolución
+S --> Audio[sounddevice]            # captura y reproduce audio
+S --> Matplotlib[Matplotlib]        # gráficos
 
 ```
 ## Estrategia de ramas
