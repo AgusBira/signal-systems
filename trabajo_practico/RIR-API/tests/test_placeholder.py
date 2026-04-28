@@ -7,8 +7,8 @@ client = TestClient(app)
 
 # Test para verificar el endpoint principal ("/")
 def test_read_root():
-    response = client.get("/")  # Hacer una solicitud GET al endpoint "/"
-    assert response.status_code == 200  # Verificar que el código de estado sea 200
-    assert response.json() == {
-        "message": "Bienvenido a la API RIR"
-    }  # Verificar el contenido de la respuesta
+    response = client.get("/")
+    assert response.status_code == 200
+    data = response.json()
+    assert "name" in data
+    assert "version" in data
